@@ -2,7 +2,7 @@ import multiprocessing
 
 import cv2
 
-from VideoParallelProcessing.MultiProcessVideoPoolExecutor import MultiProcessVideoPoolExecutor
+from MultiProcessVideoPoolExecutor import MultiProcessVideoPoolExecutor
 
 
 class VideoOptimalMultiProcess:
