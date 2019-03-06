@@ -22,7 +22,7 @@ class MultiProcessVideoPoolExecutor:
 
     def _process(self, interval):
         try:
-            process_m = self.processing_factory()
+            process_m = self.processing_factory(interval[2])
             cap = cv2.VideoCapture(self.video_path)
             cap.set(cv2.CAP_PROP_POS_FRAMES, interval[0])
             temp_list = []
@@ -41,5 +41,8 @@ class MultiProcessVideoPoolExecutor:
 
     def start_processes(self):
         pool = Pool(self.number_of_processes)
+        self.intervals.sort(key=lambda x: x[0])
+        self.intervals = [(interval[0], interval[1], idx) for idx, interval in enumerate(self.intervals)]
+        self.intervals.sort(key=lambda x: x[1] - x[0])
         results = pool.map(self._process, self.intervals)
         return list(itertools.chain(*results))
