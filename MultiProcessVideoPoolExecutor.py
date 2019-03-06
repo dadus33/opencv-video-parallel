@@ -1,4 +1,5 @@
 import itertools
+import traceback
 
 import cv2
 import multiprocessing
@@ -20,19 +21,23 @@ class MultiProcessVideoPoolExecutor:
             self.number_of_processes = number_of_processes
 
     def _process(self, interval):
-        process_m = self.processing_factory()
-        cap = cv2.VideoCapture(self.video_path)
-        cap.set(cv2.CAP_PROP_POS_FRAMES, interval[0])
-        temp_list = []
-        print(f"start processing interval: {interval}")
-        current_frame = interval[0]
-        while current_frame <= interval[1]:
-            success, frame = cap.read()
-            result = process_m.process(frame, current_frame)
-            temp_list.append(result)
-            current_frame += 1
-        print(f"end processing interval: {interval}")
-        return temp_list
+        try:
+            process_m = self.processing_factory()
+            cap = cv2.VideoCapture(self.video_path)
+            cap.set(cv2.CAP_PROP_POS_FRAMES, interval[0])
+            temp_list = []
+            print(f"start processing interval: {interval}")
+            current_frame = interval[0]
+            while current_frame <= interval[1]:
+                success, frame = cap.read()
+                result = process_m.process(frame, current_frame)
+                temp_list.append(result)
+                current_frame += 1
+            print(f"end processing interval: {interval}")
+            return temp_list
+        except Exception:
+            traceback.print_exc()
+            exit(1)
 
     def start_processes(self):
         pool = Pool(self.number_of_processes)
