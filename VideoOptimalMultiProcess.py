@@ -24,7 +24,7 @@ class VideoOptimalMultiProcess:
     def get_frame(self, seconds):
         return int(seconds*self.fps)
 
-    def start_processes(self, processing_factory, start_frame=0, end_frame=None):
+    def start_processes(self, processing_factory, start_frame=0, end_frame=None, metadata=None):
         if end_frame is None:
             end_frame = self.frame_count
 
@@ -38,4 +38,4 @@ class VideoOptimalMultiProcess:
 
         print(f"start processing intervals:{intervals}, on {self.process_count} cpu's")
         multi_process_runner = MultiProcessVideoPoolExecutor(self.video_path, processing_factory, intervals, self.process_count)
-        return multi_process_runner.start_processes()
+        return multi_process_runner.start_processes(metadata)
