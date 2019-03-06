@@ -20,7 +20,8 @@ class MultiProcessVideoPoolExecutor:
         else:
             self.number_of_processes = number_of_processes
 
-    def _process(self, interval_start, interval_stop, process_index, metadata):
+    def _process(self, input_parameter):
+        interval_start, interval_stop, process_index, metadata = input_parameter
         cap = None
         try:
             cap = cv2.VideoCapture(self.video_path)
