@@ -1,4 +1,5 @@
 import itertools
+import traceback
 
 import cv2
 import multiprocessing
@@ -19,22 +20,34 @@ class MultiProcessVideoPoolExecutor:
         else:
             self.number_of_processes = number_of_processes
 
-    def _process(self, interval):
-        process_m = self.processing_factory()
-        cap = cv2.VideoCapture(self.video_path)
-        cap.set(cv2.CAP_PROP_POS_FRAMES, interval[0])
-        temp_list = []
-        print(f"start processing interval: {interval}")
-        current_frame = interval[0]
-        while current_frame <= interval[1]:
-            success, frame = cap.read()
-            result = process_m.process(frame, current_frame)
-            temp_list.append(result)
-            current_frame += 1
-        print(f"end processing interval: {interval}")
-        return temp_list
+    def _process(self, input_parameter):
+        interval_start, interval_stop, process_index, metadata = input_parameter
+        cap = None
+        try:
+            cap = cv2.VideoCapture(self.video_path)
+            with self.processing_factory(process_index, metadata) as process_m:
+                cap.set(cv2.CAP_PROP_POS_FRAMES, interval_start)
+                temp_list = []
+                print(f"start processing interval: {(interval_start, interval_stop)}")
+                current_frame = interval_start
+                while current_frame <= interval_stop:
+                    success, frame = cap.read()
+                    result = process_m.process(frame, current_frame)
+                    temp_list.append(result)
+                    current_frame += 1
+                print(f"end processing interval: {(interval_start, interval_stop)}")
+                return temp_list
+        except Exception:
+            traceback.print_exc()
+            exit(1)
+        finally:
+            if cap is not None:
+                cap.release()
 
-    def start_processes(self):
+    def start_processes(self, metadata):
         pool = Pool(self.number_of_processes)
+        self.intervals.sort(key=lambda x: x[0])
+        self.intervals = [(interval[0], interval[1], idx, metadata) for idx, interval in enumerate(self.intervals)]
+        self.intervals.sort(key=lambda x: x[1] - x[0])
         results = pool.map(self._process, self.intervals)
         return list(itertools.chain(*results))
