@@ -25,19 +25,18 @@ class MultiProcessVideoPoolExecutor:
         cap = None
         try:
             cap = cv2.VideoCapture(self.video_path)
-            process_m = self.processing_factory(process_index, metadata)
-
-            cap.set(cv2.CAP_PROP_POS_FRAMES, interval_start)
-            temp_list = []
-            print(f"start processing interval: {(interval_start, interval_stop)}")
-            current_frame = interval_start
-            while current_frame <= interval_stop:
-                success, frame = cap.read()
-                result = process_m.process(frame, current_frame)
-                temp_list.append(result)
-                current_frame += 1
-            print(f"end processing interval: {(interval_start, interval_stop)}")
-            return temp_list
+            with self.processing_factory(process_index, metadata) as process_m:
+                cap.set(cv2.CAP_PROP_POS_FRAMES, interval_start)
+                temp_list = []
+                print(f"start processing interval: {(interval_start, interval_stop)}")
+                current_frame = interval_start
+                while current_frame <= interval_stop:
+                    success, frame = cap.read()
+                    result = process_m.process(frame, current_frame)
+                    temp_list.append(result)
+                    current_frame += 1
+                print(f"end processing interval: {(interval_start, interval_stop)}")
+                return temp_list
         except Exception:
             traceback.print_exc()
             exit(1)
