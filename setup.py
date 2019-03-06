@@ -8,5 +8,8 @@ setup(
     license='',
     author='Mihai.Petrutiu',
     author_email='',
-    description=''
+    description='',
+    install_requires=[
+        'opencv-python'
+    ]
 )
