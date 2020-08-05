@@ -1,4 +1,5 @@
 import multiprocessing
+from typing import Type
 
 import cv2
 
@@ -27,7 +28,7 @@ class VideoOptimalMultiprocess:
     def get_frame(self, seconds):
         return int(seconds * self._fps)
 
-    def start_processes(self, processor_factory: Processor, start_frame=0, end_frame=None, metadata=None):
+    def start_processes(self, processor_factory: Type[Processor], start_frame=0, end_frame=None, metadata=None):
         if end_frame is None:
             end_frame = self._frame_count
 

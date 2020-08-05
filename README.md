@@ -1,12 +1,16 @@
 # opencv-video-parallel
 ```python
-optimal_processor = VideoOptimalMultiProcess(video_path)
-lst = optimal_processor.start_processes(Signature_p)
+from video_optimal_multiprocess import VideoOptimalMultiprocess
+from processor import Processor
 
-class Signature_p:
-    def __init__(self):
-        self.signature = ImageSignature()
+optimal_processor = VideoOptimalMultiprocess(video_path, ffmpeg_path)
+results = optimal_processor.start_processes(Processor)
 
-    def process(self, frame):
-        return self.signature.generate_signature(frame)
+class FrameProcessor(Processor):
+    def __init__(self, process_index, metadata):
+        super().__init__(process_index, metadata)
+
+    def process(self, frame, frame_number):
+        # process the frame
+        return result  # will be saved in results list
 ```
