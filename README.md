@@ -1,7 +1,7 @@
 # opencv-video-parallel
 ```python
-from video_optimal_multiprocess import VideoOptimalMultiprocess
-from processor import Processor
+from video_parallel_processing.video_optimal_multiprocess import VideoOptimalMultiprocess
+from video_parallel_processing.processor import Processor
 
 optimal_processor = VideoOptimalMultiprocess(video_path, ffmpeg_path)
 results = optimal_processor.start_processes(Processor)

@@ -1,9 +1,10 @@
+import setuptools
 from setuptools import setup
 
 setup(
-    name='VideoParallelProcessing',
+    name='video_parallel_processing',
     version='1.1',
-    packages=[''],
+    packages=setuptools.find_packages(),
     url='https://github.com/MihaiTheCoder/opencv-video-parallel',
     license='',
     author='Mihai.Petrutiu',

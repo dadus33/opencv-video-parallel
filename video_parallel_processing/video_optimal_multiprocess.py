@@ -3,9 +3,9 @@ from typing import Type
 
 import cv2
 
-from multiprocess_video_pool_executor import MultiprocessVideoPoolExecutor
-from ffmpeg_wrapper import FfmpegWrapper
-from processor import Processor
+from video_parallel_processing.multiprocess_video_pool_executor import MultiprocessVideoPoolExecutor
+from video_parallel_processing.ffmpeg_wrapper import FfmpegWrapper
+from video_parallel_processing.processor import Processor
 
 
 class VideoOptimalMultiprocess:
