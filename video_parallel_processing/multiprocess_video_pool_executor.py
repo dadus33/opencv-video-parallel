@@ -50,4 +50,5 @@ class MultiprocessVideoPoolExecutor:
         self._intervals = [(interval[0], interval[1], idx, metadata) for idx, interval in enumerate(self._intervals)]
         self._intervals.sort(key=lambda x: x[1] - x[0])
         results = pool.map(self._process, self._intervals)
+        pool.terminate()
         return list(itertools.chain(*results))
