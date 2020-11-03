@@ -30,7 +30,7 @@ class VideoOptimalMultiprocess:
 
     def start_processes(self, processor_factory: Type[Processor], start_frame=0, end_frame=None, metadata=None):
         if end_frame is None:
-            end_frame = self._frame_count
+            end_frame = self._frame_count - 1
 
         total_frames = end_frame - start_frame + 1  # both ends included
         intervals_len = self._process_count * self._intervals_per_process
